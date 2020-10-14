@@ -1,0 +1,35 @@
+.chessboard {
+    border:brown 10px solid;border-collapse: collapse;
+}
+
+/* Mise en forme des noms de ligne/colonne */
+.chessboard th{
+    padding:5px;
+}
+
+/* Style des cases de l'echiquier */
+.chessboard td{
+    /*Dimensionnement relatif au navigateur*/
+    width:8vmin;
+    height:8vmin;
+    min-height:30px;
+    min-width:30px;
+    font-size: 6vmin;
+
+    background:chocolate; /*couleur par défaut*/
+    color:black;
+    text-align: center;
+    border : solid 1px grey;
+}
+
+
+/* Gestion des cases blanches */
+.chessboard tr:nth-child(even) td:nth-child(even), .chessboard tr:nth-child(odd) td:nth-child(odd) {
+    background: bisque;
+}
+
+/* Gestion des images dans les cases de l'échiquier (option) */
+.chessboard td img{
+    max-width:90%;
+    max-height:90%;
+}
