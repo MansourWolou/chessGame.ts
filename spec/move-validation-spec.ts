@@ -1,10 +1,12 @@
 import * as isPossible from '../src/move-validation'
 import * as pieces from '../src/piece'
-import { Chessboard, createEmptyChessboard, putPiece } from '../src/chessboard';
+import { Chessboard, createEmptyChessboard, putPiece, Square } from '../src/chessboard';
 import { Position, position } from '../src/position';
 import { Move, move } from '../src/movements';
+import { pathSquare } from '../src/move-validation';
 
 let chessboard : Chessboard;
+
 
 const positionA4 : Position = position(0, 3) // A4
 const positionA5 : Position = position(0, 4) // A5
@@ -352,17 +354,21 @@ describe("Test rookMove()", () => {
     beforeEach( () => {
         // TODO:
         // Initialize an empty chessboard
+        chessboard = createEmptyChessboard();
         // Place a white Rook on E4
+        putPiece(chessboard,positionE4,pieces.blackRoock);
     });
 
     it("A roock can move horizontally", () => {
-        // TODO:
         // Check the following moves are possible: moveE4_H4, moveE4_A4
+        expect(isPossible.rookMove(chessboard, moveE4_H4)).toBeTruthy();
+        expect(isPossible.rookMove(chessboard, moveE4_A4)).toBeTruthy();
     });
 
     it("A roock can move vertically", () => {
-        // TODO:
         // Check the following moves are possible: moveE4_E1, moveE4_E8
+        expect(isPossible.rookMove(chessboard, moveE4_E1)).toBeTruthy();
+        expect(isPossible.rookMove(chessboard, moveE4_E8)).toBeTruthy();
     });
 
     it("A roock cannot move diagonally", () => {
@@ -390,3 +396,35 @@ describe("Test rookMove()", () => {
         // Check the move moveE4_H4 is impossible
    });
 }); 
+/*
+describe("Test pathSquare()", () => {
+    //let path : Array<Square> = new Array(8);
+    //var arr = pathSquare(chessboard, positionE4 , positionH4);
+    //console.log(arr[0]);
+    //{"position":{"rank":4,"file":3},"isEmpty":true}
+    beforeEach(() => {
+        chessboard = createEmptyChessboard();
+        putPiece(chessboard,positionE4,pieces.blackRoock);
+        putPiece(chessboard,positionH4,pieces.whiteRoock);
+    });
+    it("A path contain zero square", () => {//{"position":{"rank":4,"file":5},"isEmpty":true}
+    var arri = pathSquare(chessboard,positionE4,positionH4);
+        var result = [
+            {
+            "position":{"rank":4,"file":6},
+            "isEmpty":true
+            },
+            {
+            "position":{"rank":4,"file":7},
+            "isEmpty":true
+            },
+            {
+            "position":{"rank":4,"file":8},
+            "isEmpty":false,
+            "piece":{"symbol":"â™–","name":"White Pawn","isWhite":true}
+            }
+        ];
+       expect(arri).toEqual(result);
+    });
+});
+*/

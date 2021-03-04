@@ -1,6 +1,6 @@
-import { Chessboard, isEmpty, Square, squareAtPosition } from "./chessboard";
+import { Chessboard, createEmptyChessboard, isEmpty, pieceAtPosition, Square, squareAtPosition } from "./chessboard";
 import { Move } from "./movements";
-import { equals, left, right, bottom, top } from "./position";
+import { equals, left, right, bottom, top, Position } from "./position";
 
 /**
  * Checks whether a Black Pawn can perform a given move.
@@ -91,7 +91,56 @@ export function queenMove(board: Chessboard, move: Move): boolean {
     // #TODO: Implement this function
     return true;
 }
-
+/**
+ * brief: return the squares between move.form and move.to in an array. diagonal path and horizontal path
+ * @param board 
+ * @param from 
+ * @param to 
+ */
+export function pathSquare(board:Chessboard , from:Position , to:Position):Array<Square>{
+    // take a temporary coordonate
+    let coord :Position = {rank: from.rank , file : from.file} ;
+    // an array of square representating the the path
+    let squareArray:Array<Square> = new Array(8) ;
+    if (from.rank === to.rank) {// if the move is horizontal
+        let distance : number = Math.abs(from.file - to.file);
+        for (let index = 0; index <= distance; index++) {
+            coord.file = coord.file + index;
+            for (let i = 0; i < 8; i++) {
+                squareArray[i] = squareAtPosition(board , coord);  
+                squareArray[i].isEmpty = isEmpty(board,squareArray[i].position) ;
+                squareArray[i].piece = pieceAtPosition(board,squareArray[i].position);        
+            }            
+        }
+    }else if (from.file === to.file) {// if move is vertival
+        let distance : number = Math.abs(from.rank - to.rank) ;
+        for (let index = 0; index <= distance; index++) {
+            coord.rank = coord.rank + index;
+            for (let i = 0; i < 8; i++) {
+                squareArray[i] = squareAtPosition(board , coord);  
+                squareArray[i].isEmpty = isEmpty(board,squareArray[i].position) ;
+                squareArray[i].piece = pieceAtPosition(board,squareArray[i].position);                
+            }            
+        }
+    }else if (from.file != to.file && from.rank != to.rank ) {// if move is diagonal
+        let dx : number = Math.abs(from.rank - to.rank);
+        let dy : number = Math.abs(from.file - to.file);
+        for (let i = 0; i <= dx; i++) {
+            for (let j = 0; j <= dy; j++) {
+                if (i == j) {
+                    coord.file = i;
+                    coord.rank = j;
+                    for (let i = 0; i < 8; i++) {
+                        squareArray[i] = squareAtPosition(board , coord);  
+                        squareArray[i].isEmpty = isEmpty(board,squareArray[i].position) ;
+                        squareArray[i].piece = pieceAtPosition(board,squareArray[i].position);                
+                    } 
+                }                
+            }            
+        }
+    }
+    return squareArray;    
+}
 /**
  * Checks whether a Rook can perform a given move.
  * A rook can move any number of squares along a rank or file, 
@@ -101,10 +150,14 @@ export function queenMove(board: Chessboard, move: Move): boolean {
  * @param move 
  */
 export function rookMove(board: Chessboard, move: Move): boolean {
-    // #TODO: Implement this function
-    return true;
+    //let arrivePosition = squareAtPosition(board,move.to!);
+    // Si les lignes de début de fin sont les mêmes, le déplacement est horizontal
+    // Si les colonnes de début de fin sont les mêmes, le déplacement est vertical
+    if(move.from?.rank === move.to?.rank || move.from?.file === move.to?.file){
+       return true;
+    }
+    return false
 }
-
 /**
  * Checks whether a Bishop can perform a given move.
  * A bishop can move any number of squares diagonally, 
